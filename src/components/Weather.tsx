@@ -16,12 +16,9 @@ interface WeatherData {
     isDay: number;
 }
 
-
-
 export default function Weather() {
     const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
-
 
     const search = async (city: string) => {
         try {

@@ -1,5 +1,5 @@
 import React from "react";
-
+import search_icon from "../assets/search.png";
 
 type Props = {
   onSearch: (city: string) => void;
@@ -20,7 +20,7 @@ export default function SearchBar({ onSearch, inputRef }: Props) {
         }}
       />
       <img
-        src="../assets/search.png"
+        src={search_icon}
         alt=""
         onClick={() => {
           if (inputRef.current) {
