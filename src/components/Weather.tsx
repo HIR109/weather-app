@@ -1,15 +1,26 @@
-import React, { useEffect, useRef, useState } from 'react'
-import "./Weather.css"
-import search_icon from "../assets/search.png"
-import wind_icon from "../assets/wind.png"
-import humidity_icon from "../assets/humidity.png"
+import React, { useEffect, useRef, useState } from 'react';
+import "./Weather.css";
+import search_icon from "../assets/search.png";
+import wind_icon from "../assets/wind.png";
+import humidity_icon from "../assets/humidity.png";
+
+interface WeatherData {
+    humidity: number;
+    windSpeed: number;
+    temperature: number;
+    location: string;
+    icon: string;
+    isDay: number;
+}
+
+
 
 export default function Weather() {
-    const [weatherData, setWeatherData] = useState(null);
-    const inputRef = useRef();
+    const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
 
-    const search = async (city) => {
+    const search = async (city: string) => {
         try {
             const url = `https://api.weatherapi.com/v1/current.json?key=${import.meta.env.VITE_APP_ID}&q=${city}`
             const response = await fetch(url);
@@ -21,7 +32,7 @@ export default function Weather() {
                 temperature: data.current.temp_c,
                 location: data.location.name,
                 icon: `https:${data.current.condition.icon}`,
-                isDay:data.current.is_day,
+                isDay: data.current.is_day,
             })
         } catch (error) {
             console.error("API呼び出しでエラー:", error);
@@ -37,10 +48,10 @@ export default function Weather() {
             <div className="search-bar">
                 <input type="text" placeholder='Search' ref={inputRef} onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                        search(inputRef.current.value)
+                        search(inputRef.current?.value || "")
                     }
                 }} />
-                <img src={search_icon} alt="" onClick={() => search(inputRef.current.value)} />
+                <img src={search_icon} alt="" onClick={() => search(inputRef.current?.value || "")} />
             </div>
             {weatherData ? <>
                 <img src={weatherData.icon} alt="" className='weather-icon' />
