@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import "./Weather.css";
-import search_icon from "../assets/search.png";
-import wind_icon from "../assets/wind.png";
-import humidity_icon from "../assets/humidity.png";
+import search_icon from "../assets/search.png"
+import wind_icon from "../assets/wind.png"
+import humidity_icon from "../assets/humidity.png"
+import SearchBar from './SearchBar'
+import WeatherInfo from './WeatherInfo';
+import WeatherDetails from './WeatherDetails';
 
 interface WeatherData {
     humidity: number;
@@ -45,37 +48,20 @@ export default function Weather() {
 
     return (
         <div className={`weather ${weatherData && weatherData.isDay === 0 ? 'night' : 'day'}`}>
-            <div className="search-bar">
-                <input type="text" placeholder='Search' ref={inputRef} onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                        search(inputRef.current?.value || "")
-                    }
-                }} />
-                <img src={search_icon} alt="" onClick={() => search(inputRef.current?.value || "")} />
-            </div>
-            {weatherData ? <>
-                <img src={weatherData.icon} alt="" className='weather-icon' />
-                <p className='temperature'>{weatherData.temperature}°c</p>
-                <p className='location'>{weatherData.location}</p>
-                <div className="weather-data">
-                    <div className="col">
-                        <img src={humidity_icon} />
-                        <div>
-                            <p>{weatherData.humidity}%</p>
-                            <span>humidity</span>
-                        </div>
-                    </div>
-                    <div className="col">
-                        <img src={wind_icon} />
-                        <div>
-                            <p>{weatherData.windSpeed}km/h</p>
-                            <span>wind peed</span>
-                        </div>
-                    </div>
-                </div>
-            </> : <></>}
-
-
+            <SearchBar onSearch={search} inputRef={inputRef} />
+            {weatherData && (
+                <>
+                    <WeatherInfo
+                        icon={weatherData.icon}
+                        temperature={weatherData.temperature}
+                        location={weatherData.location}
+                    />
+                    <WeatherDetails
+                        humidity={weatherData.humidity}
+                        windSpeed={weatherData.windSpeed}
+                    />
+                </>
+            )}
         </div>
-    )
+    );
 }
